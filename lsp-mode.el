@@ -1085,9 +1085,6 @@ calling `remove-overlays'.")
 
 (defvar-local lsp--virtual-buffer-point-max nil)
 
-(cl-defgeneric lsp-execute-command (server command arguments)
-  "Ask SERVER to execute COMMAND with ARGUMENTS.")
-
 (defun lsp-elt (sequence n)
   "Return Nth element of SEQUENCE or nil if N is out of range."
   (cond
@@ -5766,11 +5763,6 @@ REFERENCES? t when METHOD returns references."
       (lsp-workspaces))))
 
 (defalias 'lsp-feature? 'lsp--find-workspaces-for)
-
-(cl-defmethod lsp-execute-command (_server command arguments)
-  "Dispatch COMMAND execution."
-  (lsp--execute-command (lsp-make-command :command (symbol-name command)
-                                          :arguments? arguments)))
 
 (defun lsp--send-execute-command (command &optional args)
   "Create and send a 'workspace/executeCommand' message having command COMMAND and optional ARGS."
