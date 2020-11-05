@@ -6613,21 +6613,25 @@ returns the command to execute."
                        (cons proc proc))))
         :test? (lambda () (-> local-command lsp-resolve-final-function lsp-server-present?))))
 
+(defun lsp-lens--maybe-enable ()
+  "Enable `lsp-lens-mode' if lenses are supported."
+  (when (lsp-feature? "textDocument/codeLens") (lsp-lens-mode 1)))
+
 (defun lsp--auto-configure ()
   "Autoconfigure `company', `flycheck', `lsp-ui', etc if they are installed."
   (when (functionp 'lsp-ui-mode)
     (lsp-ui-mode))
 
   (when lsp-headerline-breadcrumb-enable
-    (add-hook 'lsp-configure-hook 'lsp-headerline-breadcrumb-mode))
+    (add-hook 'lsp-configure-hook #'lsp-headerline-breadcrumb-mode))
   (when lsp-modeline-code-actions-enable
-    (add-hook 'lsp-configure-hook 'lsp-modeline-code-actions-mode))
+    (add-hook 'lsp-configure-hook #'lsp-modeline-code-actions-mode))
   (when lsp-modeline-diagnostics-enable
-    (add-hook 'lsp-configure-hook 'lsp-modeline-diagnostics-mode))
+    (add-hook 'lsp-configure-hook #'lsp-modeline-diagnostics-mode))
   (when lsp-modeline-workspace-status-enable
-    (add-hook 'lsp-configure-hook 'lsp-modeline-workspace-status-mode))
+    (add-hook 'lsp-configure-hook #'lsp-modeline-workspace-status-mode))
   (when lsp-lens-enable
-    (add-hook 'lsp-configure-hook 'lsp-lens-mode))
+    (add-hook 'lsp-configure-hook #'lsp-lens--maybe-enable))
 
   ;; yas-snippet config
   (setq-local yas-inhibit-overlay-modification-protection t))
